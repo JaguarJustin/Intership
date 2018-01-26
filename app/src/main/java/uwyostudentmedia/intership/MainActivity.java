@@ -12,6 +12,7 @@ import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.webkit.WebSettings;
 import android.webkit.WebView;
 import android.webkit.WebViewClient;
 
@@ -19,6 +20,7 @@ public class MainActivity extends AppCompatActivity
         implements NavigationView.OnNavigationItemSelectedListener {
 
     WebView myWebView;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -40,6 +42,9 @@ public class MainActivity extends AppCompatActivity
 
         myWebView = (WebView) findViewById(R.id.webview);
         myWebView.setWebViewClient(new WebViewClient());
+        WebSettings webSettings = myWebView.getSettings();
+        webSettings.setJavaScriptEnabled(true);
+
     }
 
     @Override
@@ -81,15 +86,17 @@ public class MainActivity extends AppCompatActivity
         int id = item.getItemId();
 
         if (id == R.id.nav_home) {
-
+            myWebView.loadUrl("about:blank");
         } else if (id == R.id.nav_branding) {
             // Handle the camera action
-            myWebView.stopLoading();
+            myWebView.setWebViewClient(new WebViewClient());
+            //myWebView.stopLoading();
             myWebView.loadUrl("about:blank");
             myWebView.loadUrl("http://www.uwbrandingiron.com");
             //myWebView.reload();
         } else if (id == R.id.nav_design) {
-            myWebView.stopLoading();
+            myWebView.setWebViewClient(new WebViewClient());
+           // myWebView.stopLoading();
             myWebView.loadUrl("about:blank");
             myWebView.loadUrl("http://www.uwdynamicdesign.com");
             //myWebView.reload();
