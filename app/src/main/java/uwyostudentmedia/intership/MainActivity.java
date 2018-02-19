@@ -2,8 +2,6 @@ package uwyostudentmedia.intership;
 
 import android.os.AsyncTask;
 import android.os.Bundle;
-import android.support.design.widget.FloatingActionButton;
-import android.support.design.widget.Snackbar;
 import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
@@ -44,12 +42,7 @@ public class MainActivity extends AppCompatActivity
 
     private RecyclerView mRecyclerView;
     private SwipeRefreshLayout mSwipeLayout;
-    //private TextView mFeedTitleTextView;
-   // private TextView mFeedLinkTextView;
-    private TextView header;
     private List<RssFeedModel> mFeedModelList;
-    //private String mFeedTitle;
-    //private String mFeedLink;
     private ViewFlipper vf;
     private int screen;
 
@@ -80,8 +73,6 @@ public class MainActivity extends AppCompatActivity
 
         mRecyclerView = (RecyclerView) findViewById(R.id.recyclerView);
         mSwipeLayout = (SwipeRefreshLayout) findViewById(R.id.swipeRefreshLayout);
-        //mFeedTitleTextView = (TextView) findViewById(R.id.feedTitle);
-        //mFeedLinkTextView = (TextView) findViewById(R.id.feedLink);
         mRecyclerView.setLayoutManager(new LinearLayoutManager(this));
 
         new FetchFeedTask().execute((Void) null);
@@ -117,6 +108,7 @@ public class MainActivity extends AppCompatActivity
 
     }
 
+    //Takes the XML feed and parses its data.
     public List<RssFeedModel> parseFeed(InputStream inputStream) throws XmlPullParserException, IOException {
         String title = null;
         String link = null;
@@ -196,19 +188,14 @@ public class MainActivity extends AppCompatActivity
 
         private String urlLink;
 
+        //Links to the website for the rss feed.
         @Override
         protected void onPreExecute() {
             mSwipeLayout.setRefreshing(true);
-            //mFeedTitle = null;
-            //mFeedLink = null;
-            //mFeedDescription = null;
-            //mFeedTitleTextView.setText("Feed Title: " + mFeedTitle);
-            //mFeedDescriptionTextView.setText("Feed Description: " + mFeedDescription);
-            //mFeedLinkTextView.setText("Feed Link: " + mFeedLink);
-            //urlLink = mEditText.getText().toString();
             urlLink = "uwbrandingiron.com/feed";
         }
 
+        //Keeps connection going in the background.
         @Override
         protected Boolean doInBackground(Void... voids) {
             if (TextUtils.isEmpty(urlLink))
@@ -235,9 +222,6 @@ public class MainActivity extends AppCompatActivity
             mSwipeLayout.setRefreshing(false);
 
             if (success) {
-                //mFeedTitleTextView.setText("Feed Title: " + mFeedTitle);
-                //mFeedDescriptionTextView.setText("Feed Description: " + mFeedDescription);
-                //mFeedLinkTextView.setText("Feed Link: " + mFeedLink);
                 // Fill RecyclerView
                 mRecyclerView.setAdapter(new RssFeedListAdapter(mFeedModelList));
             } else {
@@ -265,22 +249,6 @@ public class MainActivity extends AppCompatActivity
         return true;
     }
 
-    /*
-    @Override
-    public boolean onOptionsItemSelected(MenuItem item) {
-        // Handle action bar item clicks here. The action bar will
-        // automatically handle clicks on the Home/Up button, so long
-        // as you specify a parent activity in AndroidManifest.xml.
-        int id = item.getItemId();
-
-        //noinspection SimplifiableIfStatement
-        if (id == R.id.action_settings) {
-            return true;
-        }
-
-        return super.onOptionsItemSelected(item);
-    }
-    */
 
     @SuppressWarnings("StatementWithEmptyBody")
     @Override
@@ -297,37 +265,26 @@ public class MainActivity extends AppCompatActivity
         } else if (id == R.id.nav_branding) {
             // Handle the camera action
             if(screen == 0) {
-                //myWebView.setWebViewClient(new WebViewClient());
-                //myWebView.stopLoading();
                 myWebView.loadUrl("about:blank");
                 myWebView.loadUrl("http://www.uwbrandingiron.com");
-                //myWebView.reload();
                 vf.showNext();
                 screen = 1;
 
             }
             else{
-                //myWebView.setWebViewClient(new WebViewClient());
-                //myWebView.stopLoading();
                 myWebView.loadUrl("about:blank");
                 myWebView.loadUrl("http://www.uwbrandingiron.com");
             }
         } else if (id == R.id.nav_design) {
             if (screen ==0) {
-                //myWebView.setWebViewClient(new WebViewClient());
-                // myWebView.stopLoading();
                 myWebView.loadUrl("about:blank");
                 myWebView.loadUrl("http://www.uwdynamicdesign.com");
-                //myWebView.reload();
                 vf.showNext();
                 screen = 1;
             }
             else{
-                //myWebView.setWebViewClient(new WebViewClient());
-                // myWebView.stopLoading();
                 myWebView.loadUrl("about:blank");
                 myWebView.loadUrl("http://www.uwdynamicdesign.com");
-                //myWebView.reload();
             }
         } else if (id == R.id.nav_media) {
             if (screen==0) {
@@ -358,10 +315,3 @@ public class MainActivity extends AppCompatActivity
         return true;
     }
 }
-/*
-private class MyWebViewClient extends WebViewClient {
-
-    @Override
-    public boolean should
-}
-*/
