@@ -53,26 +53,28 @@ public class MainActivity extends AppCompatActivity
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
 
+
+        //For helping me control the ViewFlipper with the webview.
         screen = 0;
 
-        DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
+        DrawerLayout drawer = findViewById(R.id.drawer_layout);
         ActionBarDrawerToggle toggle = new ActionBarDrawerToggle(
                 this, drawer, toolbar, R.string.navigation_drawer_open, R.string.navigation_drawer_close);
         drawer.addDrawerListener(toggle);
         toggle.syncState();
 
-        NavigationView navigationView = (NavigationView) findViewById(R.id.nav_view);
+        NavigationView navigationView = findViewById(R.id.nav_view);
         navigationView.setNavigationItemSelectedListener(this);
 
-        myWebView = (WebView) findViewById(R.id.webview);
+        myWebView = findViewById(R.id.webview);
         myWebView.setWebViewClient(new WebViewClient());
         WebSettings webSettings = myWebView.getSettings();
+        //Don't set if you don't need it.
         webSettings.setJavaScriptEnabled(true);
 
-        //header = (TextView) findViewById(R.id.header);
 
-        mRecyclerView = (RecyclerView) findViewById(R.id.recyclerView);
-        mSwipeLayout = (SwipeRefreshLayout) findViewById(R.id.swipeRefreshLayout);
+        mRecyclerView = findViewById(R.id.recyclerView);
+        mSwipeLayout = findViewById(R.id.swipeRefreshLayout);
         mRecyclerView.setLayoutManager(new LinearLayoutManager(this));
 
         new FetchFeedTask().execute((Void) null);
@@ -83,10 +85,11 @@ public class MainActivity extends AppCompatActivity
             }
         });
 
-        vf = (ViewFlipper) findViewById(R.id.viewFlipper);
+        vf = findViewById(R.id.viewFlipper);
         vf.showNext();
     }
 
+    //Used to get the data link in the rss feed and to go to the specified article
     public  void perform_action(View v)
     {
         TextView myTextView = (TextView) v;
@@ -234,7 +237,7 @@ public class MainActivity extends AppCompatActivity
 
     @Override
     public void onBackPressed() {
-        DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
+        DrawerLayout drawer = findViewById(R.id.drawer_layout);
         if (drawer.isDrawerOpen(GravityCompat.START)) {
             drawer.closeDrawer(GravityCompat.START);
         } else {
@@ -250,6 +253,7 @@ public class MainActivity extends AppCompatActivity
     }
 
 
+    //Controls navigation of the navigation drawer
     @SuppressWarnings("StatementWithEmptyBody")
     @Override
     public boolean onNavigationItemSelected(MenuItem item) {
@@ -310,7 +314,7 @@ public class MainActivity extends AppCompatActivity
             }
         }
 
-        DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
+        DrawerLayout drawer = findViewById(R.id.drawer_layout);
         drawer.closeDrawer(GravityCompat.START);
         return true;
     }
