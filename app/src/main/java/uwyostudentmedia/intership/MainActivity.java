@@ -50,7 +50,7 @@ public class MainActivity extends AppCompatActivity
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
-        Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
+        Toolbar toolbar = findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
 
 
@@ -87,6 +87,8 @@ public class MainActivity extends AppCompatActivity
 
         vf = findViewById(R.id.viewFlipper);
         vf.showNext();
+
+
     }
 
     //Used to get the data link in the rss feed and to go to the specified article

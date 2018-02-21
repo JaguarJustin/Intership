@@ -1,0 +1,55 @@
+{
+  "project_info": {
+    "project_number": "878873899416",
+    "firebase_url": "https://uwyo-student-media.firebaseio.com",
+    "project_id": "uwyo-student-media",
+    "storage_bucket": "uwyo-student-media.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:878873899416:android:e0a55c33820834f1",
+        "android_client_info": {
+          "package_name": "uwyostudentmedia.intership"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "878873899416-1vl55hruao918qm3i4o1dh1sm18faiv0.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "uwyostudentmedia.intership",
+            "certificate_hash": "cd1495fdaaacf6ad954a988bcc54e016b8081778"
+          }
+        },
+        {
+          "client_id": "878873899416-36pla7rvrr526s6k2vpq9l18vnd3bf4l.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyCmnKfJj7HKpS5JkAt1VCKY3rKiBGxO7L8"
+        }
+      ],
+      "services": {
+        "analytics_service": {
+          "status": 1
+        },
+        "appinvite_service": {
+          "status": 2,
+          "other_platform_oauth_client": [
+            {
+              "client_id": "878873899416-36pla7rvrr526s6k2vpq9l18vnd3bf4l.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        },
+        "ads_service": {
+          "status": 2
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
