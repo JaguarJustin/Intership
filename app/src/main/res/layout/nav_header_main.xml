@@ -17,7 +17,8 @@
         android:layout_width="100dp"
         android:layout_height="102dp"
         android:paddingTop="@dimen/nav_header_vertical_spacing"
-        app:srcCompat="@mipmap/studentmedia_logo" />
+        app:srcCompat="@mipmap/studentmedia_logo"
+        />
 
     <TextView
         android:layout_width="match_parent"

@@ -1,7 +1,10 @@
 package uwyostudentmedia.intership;
 
+import android.content.Context;
 import android.os.AsyncTask;
 import android.os.Bundle;
+import android.os.Handler;
+import android.os.Looper;
 import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
@@ -20,6 +23,7 @@ import android.view.MenuItem;
 import android.webkit.WebSettings;
 import android.webkit.WebView;
 import android.webkit.WebViewClient;
+import android.widget.ExpandableListView;
 import android.widget.TextView;
 import android.widget.Toast;
 import android.widget.ViewFlipper;
@@ -31,6 +35,7 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.net.URL;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 
 public class MainActivity extends AppCompatActivity
@@ -40,11 +45,15 @@ public class MainActivity extends AppCompatActivity
 
     private static final String TAG = "MainActivity";
 
-    private RecyclerView mRecyclerView;
-    private SwipeRefreshLayout mSwipeLayout;
+
     private List<RssFeedModel> mFeedModelList;
     private ViewFlipper vf;
     private int screen;
+    private ExpandableListAdapter listAdapter;
+    private ExpandableListView expandableListView;
+    private HashMap<String, List<RssFeedModel>> listDataChild =  new HashMap<String, List<RssFeedModel>>();
+    private List<String> listDataHeader= new ArrayList<String>();
+    private Context myContext;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -52,7 +61,6 @@ public class MainActivity extends AppCompatActivity
         setContentView(R.layout.activity_main);
         Toolbar toolbar = findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
-
 
         //For helping me control the ViewFlipper with the webview.
         screen = 0;
@@ -73,21 +81,49 @@ public class MainActivity extends AppCompatActivity
         webSettings.setJavaScriptEnabled(true);
 
 
-        mRecyclerView = findViewById(R.id.recyclerView);
-        mSwipeLayout = findViewById(R.id.swipeRefreshLayout);
-        mRecyclerView.setLayoutManager(new LinearLayoutManager(this));
+
+
+
+        // get the listview
+        expandableListView = (ExpandableListView) findViewById(R.id.expandableListView);
+
+        //mSwipeLayout = findViewById(R.id.swipeRefreshLayout);
+
+        myContext = MainActivity.this;
+
 
         new FetchFeedTask().execute((Void) null);
-        mSwipeLayout.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
-            @Override
-            public void onRefresh() {
-                new FetchFeedTask().execute((Void) null);
-            }
-        });
+
 
         vf = findViewById(R.id.viewFlipper);
         vf.showNext();
 
+
+    }
+
+    /*
+	 * Preparing the list data
+	 */
+    private void prepareListData() {
+        //listDataChild = new HashMap<String, List<RssFeedModel>>();
+        //listDataHeader = new ArrayList<String>();
+
+        listDataHeader.add("Branding Iron\n Online News");
+        listDataHeader.add("Podcasts");
+        listDataHeader.add("OneTV");
+        listDataHeader.add("Frontiers");
+
+        List<RssFeedModel> temp = new ArrayList<>();
+        for(int i=0; i<10; i++){
+
+            RssFeedModel item = new RssFeedModel("", "");
+            temp.add(item);
+        }
+
+        listDataChild.put(listDataHeader.get(0), mFeedModelList); // Header, Child data
+        listDataChild.put(listDataHeader.get(1), temp);
+        listDataChild.put(listDataHeader.get(2), temp);
+        listDataChild.put(listDataHeader.get(3), temp);
 
     }
 
@@ -113,6 +149,8 @@ public class MainActivity extends AppCompatActivity
 
     }
 
+
+
     //Takes the XML feed and parses its data.
     public List<RssFeedModel> parseFeed(InputStream inputStream) throws XmlPullParserException, IOException {
         String title = null;
@@ -120,6 +158,7 @@ public class MainActivity extends AppCompatActivity
         String description = null;
         boolean isItem = false;
         List<RssFeedModel> items = new ArrayList<>();
+
 
         try {
             XmlPullParser xmlPullParser = Xml.newPullParser();
@@ -163,10 +202,12 @@ public class MainActivity extends AppCompatActivity
                     description = result;
                 }
 
+
                 if (title != null && link != null && description != null) {
                     if(isItem) {
                         RssFeedModel item = new RssFeedModel(title,link);
                         items.add(item);
+
 
                     }
                     else {
@@ -182,10 +223,10 @@ public class MainActivity extends AppCompatActivity
                 }
             }
 
-            return items;
-        } finally {
-            inputStream.close();
-        }
+
+        }catch (IOException e){throw e;}
+
+        return items;
     }
 
 
@@ -196,7 +237,7 @@ public class MainActivity extends AppCompatActivity
         //Links to the website for the rss feed.
         @Override
         protected void onPreExecute() {
-            mSwipeLayout.setRefreshing(true);
+            //mSwipeLayout.setRefreshing(true);
             urlLink = "uwbrandingiron.com/feed";
         }
 
@@ -212,23 +253,29 @@ public class MainActivity extends AppCompatActivity
 
                 URL url = new URL(urlLink);
                 InputStream inputStream = url.openConnection().getInputStream();
-                mFeedModelList = parseFeed(inputStream);
+
+                    mFeedModelList = parseFeed(inputStream);
+
                 return true;
             } catch (IOException e) {
                 Log.e(TAG, "Error", e);
             } catch (XmlPullParserException e) {
                 Log.e(TAG, "Error", e);
+
             }
             return false;
         }
 
         @Override
         protected void onPostExecute(Boolean success) {
-            mSwipeLayout.setRefreshing(false);
+            //mSwipeLayout.setRefreshing(false);
 
             if (success) {
                 // Fill RecyclerView
-                mRecyclerView.setAdapter(new RssFeedListAdapter(mFeedModelList));
+
+                prepareListData();
+                listAdapter = new ExpandableListAdapter(myContext, listDataHeader, listDataChild);
+                expandableListView.setAdapter(listAdapter);
             } else {
                 Toast.makeText(MainActivity.this,
                         "Enter a valid Rss feed url",
@@ -320,4 +367,7 @@ public class MainActivity extends AppCompatActivity
         drawer.closeDrawer(GravityCompat.START);
         return true;
     }
+
+
+
 }

@@ -9,7 +9,6 @@
         android:allowBackup="true"
         android:icon="@mipmap/studentmedia_logo"
         android:label="UWYO Student Media"
-        android:roundIcon="@mipmap/studentmedia_logo_round"
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
         <activity

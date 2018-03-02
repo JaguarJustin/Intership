@@ -15,6 +15,10 @@ public class RssFeedModel {
         this.link = link;
     }
 
+    public String getTitle() {
+        return title;
+    }
+
     public String getLink() {
         return link;
     }
