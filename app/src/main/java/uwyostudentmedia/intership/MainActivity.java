@@ -3,11 +3,6 @@ package uwyostudentmedia.intership;
 import android.content.Context;
 import android.os.AsyncTask;
 import android.os.Bundle;
-import android.os.Handler;
-import android.os.Looper;
-import android.support.v4.widget.SwipeRefreshLayout;
-import android.support.v7.widget.LinearLayoutManager;
-import android.support.v7.widget.RecyclerView;
 import android.text.TextUtils;
 import android.util.Log;
 import android.util.Xml;
@@ -20,13 +15,20 @@ import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.view.ViewGroup;
 import android.webkit.WebSettings;
 import android.webkit.WebView;
 import android.webkit.WebViewClient;
+import android.widget.Button;
 import android.widget.ExpandableListView;
 import android.widget.TextView;
 import android.widget.Toast;
 import android.widget.ViewFlipper;
+import android.os.Looper;
+import android.os.Handler;
+
+import com.crashlytics.android.Crashlytics;
+import com.google.firebase.analytics.FirebaseAnalytics;
 
 import org.xmlpull.v1.XmlPullParser;
 import org.xmlpull.v1.XmlPullParserException;
@@ -37,6 +39,8 @@ import java.net.URL;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
+
+import io.fabric.sdk.android.Fabric;
 
 public class MainActivity extends AppCompatActivity
         implements NavigationView.OnNavigationItemSelectedListener {
@@ -54,6 +58,7 @@ public class MainActivity extends AppCompatActivity
     private HashMap<String, List<RssFeedModel>> listDataChild =  new HashMap<String, List<RssFeedModel>>();
     private List<String> listDataHeader= new ArrayList<String>();
     private Context myContext;
+    private FirebaseAnalytics mFirebaseAnalytics;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -74,30 +79,32 @@ public class MainActivity extends AppCompatActivity
         NavigationView navigationView = findViewById(R.id.nav_view);
         navigationView.setNavigationItemSelectedListener(this);
 
+        myContext = getApplicationContext();
+
         myWebView = findViewById(R.id.webview);
         myWebView.setWebViewClient(new WebViewClient());
+
         WebSettings webSettings = myWebView.getSettings();
+
         //Don't set if you don't need it.
         webSettings.setJavaScriptEnabled(true);
 
 
-
-
+        webSettings.setAppCacheEnabled(true);
+        webSettings.setAppCachePath(myContext.getCacheDir().getPath());
+        webSettings.setCacheMode(WebSettings.LOAD_DEFAULT);
+        // Obtain the FirebaseAnalytics instance.
+        mFirebaseAnalytics = FirebaseAnalytics.getInstance(this);
 
         // get the listview
         expandableListView = (ExpandableListView) findViewById(R.id.expandableListView);
 
-        //mSwipeLayout = findViewById(R.id.swipeRefreshLayout);
-
-        myContext = MainActivity.this;
 
 
         new FetchFeedTask().execute((Void) null);
 
-
         vf = findViewById(R.id.viewFlipper);
         vf.showNext();
-
 
     }
 
@@ -105,10 +112,8 @@ public class MainActivity extends AppCompatActivity
 	 * Preparing the list data
 	 */
     private void prepareListData() {
-        //listDataChild = new HashMap<String, List<RssFeedModel>>();
-        //listDataHeader = new ArrayList<String>();
 
-        listDataHeader.add("Branding Iron\n Online News");
+        listDataHeader.add("Branding Iron\n Online");
         listDataHeader.add("Podcasts");
         listDataHeader.add("OneTV");
         listDataHeader.add("Frontiers");
@@ -116,8 +121,15 @@ public class MainActivity extends AppCompatActivity
         List<RssFeedModel> temp = new ArrayList<>();
         for(int i=0; i<10; i++){
 
-            RssFeedModel item = new RssFeedModel("", "");
-            temp.add(item);
+            if(i==0){
+                RssFeedModel item = new RssFeedModel("Coming Soon", "");
+                temp.add(item);
+            }
+            else{
+                RssFeedModel item = new RssFeedModel("", "");
+                temp.add(item);
+            }
+
         }
 
         listDataChild.put(listDataHeader.get(0), mFeedModelList); // Header, Child data
@@ -128,11 +140,15 @@ public class MainActivity extends AppCompatActivity
     }
 
     //Used to get the data link in the rss feed and to go to the specified article
-    public  void perform_action(View v)
+    public void perform_action(View v)
     {
         TextView myTextView = (TextView) v;
 
         String link = myTextView.getText().toString();
+
+        Bundle bundle = new Bundle();
+        bundle.putString(FirebaseAnalytics.Param.CONTENT_TYPE,"link");
+        mFirebaseAnalytics.logEvent(FirebaseAnalytics.Event.SELECT_CONTENT,bundle);
 
         if(link == null)
         {
@@ -158,7 +174,6 @@ public class MainActivity extends AppCompatActivity
         String description = null;
         boolean isItem = false;
         List<RssFeedModel> items = new ArrayList<>();
-
 
         try {
             XmlPullParser xmlPullParser = Xml.newPullParser();
@@ -202,12 +217,10 @@ public class MainActivity extends AppCompatActivity
                     description = result;
                 }
 
-
                 if (title != null && link != null && description != null) {
                     if(isItem) {
                         RssFeedModel item = new RssFeedModel(title,link);
                         items.add(item);
-
 
                     }
                     else {
@@ -228,7 +241,6 @@ public class MainActivity extends AppCompatActivity
 
         return items;
     }
-
 
     private class FetchFeedTask extends AsyncTask<Void, Void, Boolean> {
 
@@ -289,18 +301,24 @@ public class MainActivity extends AppCompatActivity
         DrawerLayout drawer = findViewById(R.id.drawer_layout);
         if (drawer.isDrawerOpen(GravityCompat.START)) {
             drawer.closeDrawer(GravityCompat.START);
-        } else {
-            super.onBackPressed();
+        }
+        else {
+            if(screen == 1) {
+                vf.showNext();
+                myWebView.loadUrl("about:blank");
+                screen = 0;
+            }
         }
     }
 
+    /*
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         // Inflate the menu; this adds items to the action bar if it is present.
         getMenuInflater().inflate(R.menu.main, menu);
         return true;
     }
-
+    */
 
     //Controls navigation of the navigation drawer
     @SuppressWarnings("StatementWithEmptyBody")
@@ -367,7 +385,5 @@ public class MainActivity extends AppCompatActivity
         drawer.closeDrawer(GravityCompat.START);
         return true;
     }
-
-
 
 }

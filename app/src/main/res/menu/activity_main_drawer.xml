@@ -1,27 +1,32 @@
 <?xml version="1.0" encoding="utf-8"?>
 <menu xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     tools:showIn="navigation_view">
 
     <group android:checkableBehavior="single">
         <item
             android:id="@+id/nav_home"
+            android:icon="@mipmap/ic_home"
             android:title="Home" />
         <item
             android:id="@+id/nav_branding"
-            android:icon="@drawable/ic_menu_camera"
+            android:icon="@mipmap/bilogo"
+            android:iconTint="#01b4db"
             android:title="Branding Iron" />
         <item
             android:id="@+id/nav_design"
-            android:icon="@drawable/ic_menu_gallery"
+            android:icon="@mipmap/ddlogo"
+            android:iconTint="#f78d25"
             android:title="Dynamic Design" />
         <item
             android:id="@+id/nav_media"
-            android:icon="@drawable/ic_menu_slideshow"
+            android:icon="@mipmap/dmlogo"
             android:title="Dynamic Media" />
         <item
             android:id="@+id/nav_laramie"
-            android:icon="@drawable/ic_menu_manage"
+            android:icon="@mipmap/ll_logo"
+            android:iconTint="#000000"
             android:title="Laramie Living" />
     </group>
 

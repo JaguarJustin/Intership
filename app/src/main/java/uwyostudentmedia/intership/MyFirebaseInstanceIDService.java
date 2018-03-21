@@ -1,8 +1,6 @@
 package uwyostudentmedia.intership;
 
-import android.app.Service;
-import android.content.Intent;
-import android.os.IBinder;
+
 import android.util.Log;
 
 import com.google.firebase.iid.FirebaseInstanceId;
@@ -13,7 +11,6 @@ import com.google.firebase.iid.FirebaseInstanceIdService;
 public class MyFirebaseInstanceIDService extends FirebaseInstanceIdService {
 
     private static final String TAG = "IDSERVICE";
-
 
     @Override
     public void onTokenRefresh() {
@@ -27,7 +24,6 @@ public class MyFirebaseInstanceIDService extends FirebaseInstanceIdService {
         sendRegistrationToServer(refreshedToken);
     }
 
-
     /**
      * Persist token to third-party servers.
      *
@@ -38,5 +34,6 @@ public class MyFirebaseInstanceIDService extends FirebaseInstanceIdService {
      */
     private void sendRegistrationToServer(String token) {
         // TODO: Implement this method to send token to your app server.
+
     }
 }

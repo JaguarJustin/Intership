@@ -24,12 +24,9 @@ public class MyFirebaseMessagingService extends FirebaseMessagingService {
     public MyFirebaseMessagingService() {
     }
 
-
     @Override
     public void onMessageReceived(RemoteMessage remoteMessage) {
-        // ...
 
-        // TODO(developer): Handle FCM messages here.
         // Not getting messages here? See why this may be: https://goo.gl/39bRNJ
         Log.d(TAG, "From: " + remoteMessage.getFrom());
 
@@ -57,7 +54,6 @@ public class MyFirebaseMessagingService extends FirebaseMessagingService {
         // message, here is where that should be initiated. See sendNotification method below.
        // sendNotification(remoteMessage.getData().toString());
     }
-
 
     /**
      * Schedule a job using FirebaseJobDispatcher.

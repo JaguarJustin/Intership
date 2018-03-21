@@ -6,6 +6,7 @@
     android:layout_height="match_parent"
     app:layout_behavior="@string/appbar_scrolling_view_behavior"
     android:orientation="vertical"
+    android:background="#aaffff"
     tools:context="uwyostudentmedia.intership.MainActivity"
     tools:showIn="@layout/app_bar_main">
 
@@ -24,9 +25,7 @@
             android:layout_height="match_parent"
             android:id="@+id/webview"/>
 
-
     </LinearLayout>
-
 
     <LinearLayout
         android:layout_width="match_parent"
@@ -34,23 +33,19 @@
         android:orientation="vertical">
 
         <ImageView
-            android:layout_width="150dp"
-            android:layout_height="150dp"
-            android:src="@mipmap/studentmedia_logo"
             android:id="@+id/logo"
-            android:scaleType="fitXY"/>
-
-
+            android:layout_width="200dp"
+            android:layout_height="150dp"
+            android:adjustViewBounds="false"
+            android:padding="0dp"
+            android:src="@mipmap/studentmedia_logo"/>
 
             <ExpandableListView
                 android:id="@+id/expandableListView"
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content" />
-
+                android:layout_height="match_parent" />
 
     </LinearLayout>
 
 </ViewFlipper>
-
-
 </android.support.constraint.ConstraintLayout>
