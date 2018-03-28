@@ -1,8 +1,10 @@
 package uwyostudentmedia.intership;
 
 import android.content.Context;
+import android.graphics.Color;
 import android.os.AsyncTask;
 import android.os.Bundle;
+import android.os.CountDownTimer;
 import android.text.TextUtils;
 import android.util.Log;
 import android.util.Xml;
@@ -19,14 +21,13 @@ import android.view.ViewGroup;
 import android.webkit.WebSettings;
 import android.webkit.WebView;
 import android.webkit.WebViewClient;
-import android.widget.Button;
 import android.widget.ExpandableListView;
 import android.widget.TextView;
 import android.widget.Toast;
 import android.widget.ViewFlipper;
 import android.os.Looper;
 import android.os.Handler;
-
+import android.view.View.OnClickListener;
 import com.crashlytics.android.Crashlytics;
 import com.google.firebase.analytics.FirebaseAnalytics;
 
@@ -49,7 +50,6 @@ public class MainActivity extends AppCompatActivity
 
     private static final String TAG = "MainActivity";
 
-
     private List<RssFeedModel> mFeedModelList;
     private ViewFlipper vf;
     private int screen;
@@ -59,6 +59,7 @@ public class MainActivity extends AppCompatActivity
     private List<String> listDataHeader= new ArrayList<String>();
     private Context myContext;
     private FirebaseAnalytics mFirebaseAnalytics;
+    private TextView linkTextview;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -98,7 +99,25 @@ public class MainActivity extends AppCompatActivity
 
         // get the listview
         expandableListView = (ExpandableListView) findViewById(R.id.expandableListView);
-
+        expandableListView.setOnChildClickListener(new ExpandableListView.OnChildClickListener() {
+            @Override
+            public boolean onChildClick(ExpandableListView parent, final View v, final int groupPosition, int childPosition, long id)
+            {
+                v.findViewById(R.id.titleText).setBackgroundColor(Color.parseColor("#6d6d6d"));
+                final Handler handler = new Handler();
+                handler.postDelayed(new Runnable() {
+                    @Override
+                    public void run() {
+                        // Do something after 5s = 5000ms
+                        perform_action(v.findViewById(R.id.linkText));
+                        v.findViewById(R.id.titleText).setBackgroundColor(Color.parseColor("#8e8e8e"));
+                    }
+                }, 500);
+                //v.findViewById(R.id.titleText).setBackgroundColor(Color.parseColor("#8e8e8e"));
+                //perform_action(v.findViewById(R.id.linkText));
+                return true;
+            }
+        });
 
 
         new FetchFeedTask().execute((Void) null);
@@ -113,13 +132,13 @@ public class MainActivity extends AppCompatActivity
 	 */
     private void prepareListData() {
 
-        listDataHeader.add("Branding Iron\n Online");
+        listDataHeader.add("Branding Iron Online");
         listDataHeader.add("Podcasts");
         listDataHeader.add("OneTV");
         listDataHeader.add("Frontiers");
 
         List<RssFeedModel> temp = new ArrayList<>();
-        for(int i=0; i<10; i++){
+        for(int i=0; i<1; i++){
 
             if(i==0){
                 RssFeedModel item = new RssFeedModel("Coming Soon", "");
@@ -131,10 +150,12 @@ public class MainActivity extends AppCompatActivity
             }
 
         }
+        List<RssFeedModel> tv = new ArrayList<>();
+        tv.add(new RssFeedModel("OneTV Channel","https://www.youtube.com/channel/UCy-Hcyj83bMHRVlPeVSssLg"));
 
         listDataChild.put(listDataHeader.get(0), mFeedModelList); // Header, Child data
         listDataChild.put(listDataHeader.get(1), temp);
-        listDataChild.put(listDataHeader.get(2), temp);
+        listDataChild.put(listDataHeader.get(2), tv);
         listDataChild.put(listDataHeader.get(3), temp);
 
     }
@@ -142,6 +163,7 @@ public class MainActivity extends AppCompatActivity
     //Used to get the data link in the rss feed and to go to the specified article
     public void perform_action(View v)
     {
+        Log.d(TAG, "perform_action: entered");
         TextView myTextView = (TextView) v;
 
         String link = myTextView.getText().toString();

@@ -4,7 +4,8 @@
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     android:orientation="vertical"
-    card_view:cardCornerRadius="5dp">
+    card_view:cardCornerRadius="5dp"
+    card_view:contentPadding="5dp">
 
     <LinearLayout
         android:layout_width="match_parent"
@@ -18,20 +19,19 @@
         <TextView
             android:id="@+id/titleText"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
+            android:layout_height="match_parent"
             android:textStyle="bold"
-            android:textColor="#ffffff"
-            android:textSize="15dp"/>
+            android:textColor="@color/white"
+            android:textSize="17dp"/>
 
 
         <TextView
             android:id="@+id/linkText"
-            android:layout_width="match_parent"
+            android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:onClick="perform_action"
-            android:clickable="true"
             android:textColor="@color/colorPrimary"
-            android:textSize="10dp"/>
+            android:textSize="10dp"
+            android:visibility="gone"/>
 
 
     </LinearLayout>

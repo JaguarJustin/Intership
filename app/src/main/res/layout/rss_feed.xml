@@ -15,6 +15,6 @@
             android:id="@+id/expandableListView"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:groupIndicator="@drawable/indicator"/>
+            android:groupIndicator="@null"/>
 
 </android.support.constraint.ConstraintLayout>

@@ -7,6 +7,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.BaseExpandableListAdapter;
+import android.widget.ImageView;
 import android.widget.TextView;
 
 import java.util.HashMap;
@@ -51,8 +52,7 @@ public class ExpandableListAdapter extends BaseExpandableListAdapter {
  
         TextView txtListChild = (TextView) convertView
                 .findViewById(R.id.titleText);
-        TextView txtListChild2 = (TextView) convertView
-                .findViewById(R.id.linkText);
+        TextView txtListChild2 = (TextView) convertView.findViewById(R.id.linkText);
  
         txtListChild.setText(childInfo.getTitle());
         txtListChild2.setText(childInfo.getLink());
@@ -89,6 +89,12 @@ public class ExpandableListAdapter extends BaseExpandableListAdapter {
                     .getSystemService(Context.LAYOUT_INFLATER_SERVICE);
             convertView = infalInflater.inflate(R.layout.list_group, null);
         }
+        ImageView iv = convertView.findViewById(R.id.imageView2);
+        if (isExpanded) {
+            iv.setImageResource(R.drawable.ic_keyboard_arrow_up_white_24dp);
+        } else {
+            iv.setImageResource(R.drawable.ic_keyboard_arrow_down_white_24dp);
+        }
  
         TextView lblListHeader = (TextView) convertView.findViewById(R.id.lblListHeader);
         lblListHeader.setTypeface(null, Typeface.BOLD);
@@ -106,4 +112,5 @@ public class ExpandableListAdapter extends BaseExpandableListAdapter {
     public boolean isChildSelectable(int groupPosition, int childPosition) {
         return true;
     }
+
 }
